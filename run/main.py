@@ -4,6 +4,17 @@ import os
 import torch
 from torch_geometric import seed_everything
 
+import sys
+
+# Get the current script's directory
+current_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Get the parent directory
+parent_directory = os.path.dirname(current_directory)
+
+# Add the parent directory to sys.path
+sys.path.append(parent_directory)
+
 from graphgym.cmd_args import parse_args
 from graphgym.config import cfg, dump_cfg, load_cfg, set_run_dir, set_out_dir
 from graphgym.loader import create_dataset, create_loader
@@ -16,7 +27,7 @@ from graphgym.utils.agg_runs import agg_runs
 from graphgym.utils.comp_budget import params_count
 from graphgym.utils.device import auto_select_device
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Load cmd line args
     args = parse_args()
     # Load config file
@@ -44,15 +55,14 @@ if __name__ == '__main__':
         logging.info(model)
         logging.info(cfg)
         cfg.params = params_count(model)
-        logging.info('Num parameters: %s', cfg.params)
+        logging.info("Num parameters: %s", cfg.params)
         # Start training
-        if cfg.train.mode == 'standard':
+        if cfg.train.mode == "standard":
             train(loggers, loaders, model, optimizer, scheduler)
         else:
-            train_dict[cfg.train.mode](loggers, loaders, model, optimizer,
-                                       scheduler)
+            train_dict[cfg.train.mode](loggers, loaders, model, optimizer, scheduler)
     # Aggregate results from different seeds
     agg_runs(cfg.out_dir, cfg.metric_best)
     # When being launched in batch mode, mark a yaml as done
     if args.mark_done:
-        os.rename(args.cfg_file, f'{args.cfg_file}_done')
+        os.rename(args.cfg_file, f"{args.cfg_file}_done")

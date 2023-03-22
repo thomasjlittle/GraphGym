@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-CONFIG=example
-GRID=example
-REPEAT=3
+CONFIG=BCDB_Dataset
+GRID=BCDB_grid
+REPEAT=1
 MAX_JOBS=8
 
 # generate configs (after controlling computational budget)
